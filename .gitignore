@@ -1,21 +1,23 @@
-# Environment Variables (Sensitve Secrets)
-*.env
-*.env.local
-*.env.production
-
-# Python / FastAPI
+# Python
 backend/venv/
-backend/__pycache__/
-backend/*.pyc
-backend/.pytest_cache/
+__pycache__/
+*.py[cod]
+*.pyo
 
-# Node / Next.js
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Next.js
 frontend/node_modules/
 frontend/.next/
 frontend/out/
 
-# Database / OS files
-*.db
-*.sqlite3
-.DS_Store
+# IDE
 .vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
