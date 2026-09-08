@@ -9,13 +9,23 @@ class Settings(BaseSettings):
     
     DATABASE_URL: str
 
-    # ডিফল্ট ভ্যালু ছাড়া টাইপ ডিক্লেয়ারেশন
-    ALLOWED_ORIGINS: List[str]
+    # Union[List[str], str] ব্যবহার করলে pydantic অটো-JSON পার্স করার সময় ফেল করবে না
+    ALLOWED_ORIGINS: Union[List[str], str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ]
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
-        if isinstance(v, str) and not v.startswith("["):
+        # যদি ইনপুট স্ট্রিং হয়, তবে কমা দিয়ে আলাদা করে List বানিয়ে নেবে
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
             return [i.strip() for i in v.split(",") if i.strip()]
         return v
 
